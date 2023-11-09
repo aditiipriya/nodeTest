@@ -14,8 +14,9 @@ module.exports = {
 
   updateArticle: async (params) => {
     let articleExist = await articleService.getArticleById(params)
+
     if (articleExist && articleExist.userId != params.userId) {
-      throw customException.UNAUTHORIZED_ACCESS_EXCEPTION();
+      throw customException.unauthorizeAccess();
     }
     return articleService.updateArticle(params)
       .then((data) => {
@@ -37,9 +38,16 @@ module.exports = {
   },
 
   deleteArticle: async (params) => {
+    let articleExist = await articleService.getArticleById(params)
+    if (articleExist && articleExist.userId != params.userId) {
+      throw customException.unauthorizeAccess();
+    }
     return await articleService.deleteArticle(params)
-      .then(() => {
-        return { message: "Article deleted !!" };
+      .then((data) => {
+        if (data)
+          return { message: "Article deleted !!" };
+        else
+          throw customException.ARTICLE_NOT_FOUND();
       });
   },
 

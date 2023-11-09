@@ -13,9 +13,11 @@ const autntctTkn = function (req, res, next) {
                 next()
             }     
         }
-        else {
-            throw customException.unauthorizeAccess();
-        }
+        // else {
+        //     throw customException.unauthorizeAccess();
+        // }
+        // return next(customException.unauthorizeAccess())
+        // next(customException.unauthorizeAccess())
     }
     catch(err) {
         next(err)

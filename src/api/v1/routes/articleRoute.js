@@ -5,7 +5,7 @@ const validators =require('../validators/validateArticle');
 const middleware= require('../middleware');
 
 
-articleRouter.route("/create").post([ middleware.authenticate.autntctTkn, validators.validateCreateArticle], (req, res) => {
+articleRouter.route("/createArticle").post([ middleware.authenticate.autntctTkn, validators.validateCreateArticle], (req, res) => {
   req.body.userId = req.user.userId;
   articleController.createArticle({ ...req.body })
   .then( (result)=> { resHndlr.sendSuccess(res, result, req); })
@@ -13,7 +13,7 @@ articleRouter.route("/create").post([ middleware.authenticate.autntctTkn, valida
 });
 
 
-articleRouter.route("/update").patch([middleware.authenticate.autntctTkn], (req, res) =>{
+articleRouter.route("/updateArticle").patch([middleware.authenticate.autntctTkn], (req, res) =>{
   req.body.userId = req.user.userId;
   articleController.updateArticle({ ...req.body })
     .then( (result) => {
@@ -35,6 +35,7 @@ articleRouter.route("/viewArticle").get([],  (req, res) =>{
 });
 
 articleRouter.route("/deleteArticle").delete([middleware.authenticate.autntctTkn], (req, res)=> {
+  req.query.userId = req.user.userId;
   articleController.deleteArticle({...req.query}).then( (result) =>{
       resHndlr.sendSuccess(res, result, req);
     })
